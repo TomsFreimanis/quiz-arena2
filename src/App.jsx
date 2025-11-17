@@ -10,6 +10,7 @@ import Achievements from "./pages/Achievements";
 import Packs from "./pages/Packs";
 import Login from "./pages/Login"; // ← 🔥 PIEVIENOTS
 import DailyReward from "./pages/DailyReward";
+import Friends from "./pages/Friends";
 
 export default function App() {
   return (
@@ -27,7 +28,7 @@ export default function App() {
           <Route path="/achievements" element={<Achievements />} />
           <Route path="/packs" element={<Packs />} />
           <Route path="/daily" element={<DailyReward />} />
-
+<Route path="/friends" element={<Friends />} />
           {/* 🔥 LOGIN PAGE */}
           <Route path="/login" element={<Login />} />
         </Routes>

@@ -584,37 +584,49 @@ setQuestions(shuffled);
               </h3>
 
               <div className="grid grid-cols-1 gap-3 text-left">
-                {optionsToShow.map((opt, i) => {
-                  const correct = currentQuestion.correct;
-                  let style =
-                    "bg-slate-900/70 hover:bg-slate-900 border-slate-700/80";
+            {optionsToShow.map((opt, i) => {
+  const correct = currentQuestion.correct;
 
-                  if (answered) {
-                    if (opt === correct && opt === selectedOption) {
-                      style =
-                        "bg-emerald-500/90 border-emerald-300 text-white";
-                    } else if (opt === correct) {
-                      style =
-                        "bg-emerald-900/70 border-emerald-500 text-emerald-200";
-                    } else if (opt === selectedOption && opt !== correct) {
-                      style = "bg-red-700/80 border-red-400 text-red-100";
-                    } else {
-                      style =
-                        "bg-slate-900/60 border-slate-800 text-slate-300";
-                    }
-                  }
+  const getBtnStyle = () => {
+    if (!answered) {
+      // svaigs variants — NEKĀDU leftover hover/tap stilu
+      return "bg-slate-900/70 border-slate-700/80 text-slate-200 hover:bg-slate-800";
+    }
 
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => handleAnswer(opt)}
-                      disabled={answered}
-                      className={`p-3 rounded-2xl border text-sm md:text-base transition-colors ${style}`}
-                    >
-                      {opt}
-                    </button>
-                  );
-                })}
+    // atbildēts
+    if (opt === correct && opt === selectedOption)
+      return "bg-emerald-500/90 border-emerald-300 text-white";
+
+    if (opt === correct)
+      return "bg-emerald-900/70 border-emerald-500 text-emerald-200";
+
+    if (opt === selectedOption && opt !== correct)
+      return "bg-red-700/80 border-red-400 text-red-100";
+
+    // pārējie
+    return "bg-slate-800/50 border-slate-800 text-slate-500";
+  };
+
+  return (
+    <button
+      key={i}
+      onClick={() => !answered && handleAnswer(opt)}
+      disabled={answered}
+      className={`
+        p-3 rounded-2xl border 
+        text-sm md:text-base 
+        transition-all duration-200
+        active:scale-[0.97]
+        touch-manipulation 
+        [tap-highlight-color:transparent]
+        ${getBtnStyle()}
+      `}
+    >
+      {opt}
+    </button>
+  );
+})}
+
               </div>
             </>
           )}

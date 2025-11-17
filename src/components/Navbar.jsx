@@ -1,21 +1,19 @@
-// src/components/Navbar.jsx
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../services/firebase";
+import { Coins, ChevronDown } from "lucide-react";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [localUser, setLocalUser] = useState(null);
 
-  // 🔥 Sync localStorage user
   useEffect(() => {
     const stored = localStorage.getItem("user");
     setLocalUser(stored ? JSON.parse(stored) : null);
   }, []);
 
-  // 🔥 Listen to Firebase auth changes
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
       if (!u) {
@@ -26,11 +24,10 @@ export default function Navbar() {
     return () => unsub();
   }, []);
 
-  // 🔥 Logout
   const handleLogout = async () => {
-    localStorage.removeItem("user"); // remove first
+    localStorage.removeItem("user");
     setLocalUser(null);
-    await signOut(auth); // then firebase signOut
+    await signOut(auth);
   };
 
   return (
@@ -39,7 +36,7 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 text-xl font-bold">
-          🏀 <span>NBA QUIZ</span>
+          🏀 <span>NBA Viktorīna</span>
         </Link>
 
         {/* Mobile toggle */}
@@ -52,17 +49,41 @@ export default function Navbar() {
 
         {/* Desktop menu */}
         <div className="hidden md:flex gap-8 text-lg font-medium items-center">
-          <Link className="hover:text-yellow-400" to="/">Home</Link>
-          <Link className="hover:text-yellow-400" to="/quiz-start">Quiz</Link>
-          <Link className="hover:text-yellow-400" to="/leaderboard">Leaderboard</Link>
-          <Link className="hover:text-yellow-400" to="/achievements">Achievements</Link>
-          <Link className="hover:text-yellow-400" to="/store">Store</Link>
-          <Link className="hover:text-yellow-400" to="/profile">Profile</Link>
-          <Link className="hover:text-yellow-400" to="/packs">🎁 Packs</Link>
-          <Link className="hover:text-yellow-400" to="/daily">🎁 Daily</Link>
+          <Link className="hover:text-yellow-400" to="/">Sākums</Link>
+          <Link className="hover:text-yellow-400" to="/quiz-start">Viktorīna</Link>
+          <Link className="hover:text-yellow-400" to="/leaderboard">Līderi</Link>
+          <Link className="hover:text-yellow-400" to="/achievements">Tituli</Link>
+          <Link className="hover:text-yellow-400" to="/store">Veikals</Link>
+          <Link className="hover:text-yellow-400" to="/profile">Profils</Link>
+          <Link className="hover:text-yellow-400" to="/friends">Draugi</Link>
+
+          {/* --- FIXED DROPDOWN --- */}
+     <div className="relative group cursor-pointer select-none">
+
+  <div className="flex items-center gap-1 hover:text-yellow-400">
+    <Coins size={18} className="text-yellow-400" />
+    Iegūt
+    <ChevronDown 
+      size={16}
+      className="opacity-70 transition-transform duration-200 group-hover:rotate-180"
+    />
+  </div>
+
+  {/* DROPDOWN */}
+  <div className="
+      absolute left-0 top-full mt-0 
+      hidden group-hover:flex flex-col
+      bg-[#111529] border border-white/10 rounded-lg shadow-lg 
+      w-40 py-1 z-50 transition-all duration-150
+    ">
+    <Link className="px-4 py-2 hover:bg-white/10" to="/packs">🎁 Pakas</Link>
+    <Link className="px-4 py-2 hover:bg-white/10" to="/daily">🎁 Dienas balvas</Link>
+  </div>
+
+</div>
 
 
-          {/* 🔥 Login / Logout button */}
+
           {localUser ? (
             <button
               onClick={handleLogout}
@@ -75,7 +96,7 @@ export default function Navbar() {
                 transition-all duration-200
               "
             >
-              Logout
+              Iziet
             </button>
           ) : (
             <Link
@@ -89,25 +110,30 @@ export default function Navbar() {
                 transition-all duration-200
               "
             >
-              Login
+              Pieslēgties
             </Link>
           )}
         </div>
       </div>
 
-      {/* Mobile menu dropdown */}
+      {/* Mobile menu */}
       {open && (
         <div className="md:hidden bg-[#0A0D1F] border-t border-white/10 flex flex-col p-4 text-center gap-4 text-lg">
           
-          <Link onClick={() => setOpen(false)} to="/">Home</Link>
-          <Link onClick={() => setOpen(false)} to="/quiz-start">Quiz</Link>
-          <Link onClick={() => setOpen(false)} to="/leaderboard">Leaderboard</Link>
-          <Link onClick={() => setOpen(false)} to="/achievements">Achievements</Link>
-          <Link onClick={() => setOpen(false)} to="/store">Store</Link>
-          <Link onClick={() => setOpen(false)} to="/profile">Profile</Link>
-          <Link onClick={() => setOpen(false)} to="/packs">🎁 Packs</Link>
-          <Link onClick={() => setOpen(false)} to="/daily">🎁 Daily</Link>
+          <Link onClick={() => setOpen(false)} to="/">Sākums</Link>
+          <Link onClick={() => setOpen(false)} to="/quiz-start">Viktorīna</Link>
+          <Link onClick={() => setOpen(false)} to="/leaderboard">Līderi</Link>
+          <Link onClick={() => setOpen(false)} to="/achievements">Tituli</Link>
+          <Link onClick={() => setOpen(false)} to="/store">Veikals</Link>
+          <Link onClick={() => setOpen(false)} to="/profile">Profils</Link>
+          <Link onClick={() => setOpen(false)} to="/friends">Draugi</Link>
 
+          {/* Mobile dropdown */}
+          <div className="flex flex-col gap-2 bg-black/20 p-2 rounded-lg">
+            <div className="text-white/70 text-sm">🪙 Iegūt</div>
+            <Link onClick={() => setOpen(false)} to="/packs">🎁 Pakas</Link>
+            <Link onClick={() => setOpen(false)} to="/daily">🎁 Dienas balvas</Link>
+          </div>
 
           {localUser ? (
             <button
@@ -124,7 +150,7 @@ export default function Navbar() {
                 transition-all
               "
             >
-              Logout
+              Iziet
             </button>
           ) : (
             <Link
@@ -139,7 +165,7 @@ export default function Navbar() {
                 transition-all
               "
             >
-              Login
+              Pieslēgties
             </Link>
           )}
         </div>
